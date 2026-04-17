@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>5-Day Lean Bulk Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0a0b; --surface: #111114; --card: #16161a; --border: #2a2a32;
+    --accent: #c8f135; --accent2: #4af0b4; --text: #e8e8ec; --muted: #6b6b7a; --red: #ff5757;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; padding: 24px 16px 60px; }
+  .container { max-width: 780px; margin: 0 auto; }
+  header { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; background: var(--accent); color: #0a0a0b; padding: 3px 10px; border-radius: 2px; margin-bottom: 12px; }
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 10vw, 80px); line-height: 0.9; color: var(--text); margin-bottom: 14px; }
+  h1 span { color: var(--accent); }
+  .meta-grid { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 16px; }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .meta-value { font-size: 14px; font-weight: 600; color: var(--accent2); }
+  .edit-hint { display: flex; align-items: center; gap: 8px; background: #c8f13510; border: 1px solid #c8f13530; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+  .edit-hint svg { color: var(--accent); flex-shrink: 0; }
+  .day-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; transition: border-color 0.2s; }
+  .day-card:hover { border-color: #3a3a48; }
+  .day-card.open { border-color: #3a3a48; }
+  .day-header { display: flex; align-items: center; gap: 16px; padding: 18px 20px; cursor: pointer; user-select: none; }
+  .day-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; line-height: 1; color: var(--border); min-width: 40px; transition: color 0.2s; }
+  .day-card.open .day-num, .day-card:hover .day-num { color: var(--accent); }
+  .day-info { flex: 1; }
+  .day-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.04em; color: var(--text); line-height: 1; }
+  .day-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .day-badges { display: flex; gap: 6px; align-items: center; }
+  .badge { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; border: 1px solid; }
+  .badge-push { color: #f5a623; border-color: #f5a62344; background: #f5a62310; }
+  .badge-pull { color: var(--accent2); border-color: #4af0b430; background: #4af0b410; }
+  .badge-legs { color: #c084fc; border-color: #c084fc44; background: #c084fc10; }
+  .badge-strength { color: var(--red); border-color: #ff575744; background: #ff575710; }
+  .badge-hypertrophy { color: #60a5fa; border-color: #60a5fa44; background: #60a5fa10; }
+  .chevron { width: 20px; height: 20px; color: var(--muted); transition: transform 0.3s, color 0.2s; flex-shrink: 0; }
+  .day-card.open .chevron { transform: rotate(180deg); color: var(--accent); }
+  .day-body { display: none; padding: 0 20px 20px; }
+  .day-card.open .day-body { display: block; }
+  .divider { height: 1px; background: var(--border); margin-bottom: 20px; }
+  .notes-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+  .notes-bar strong { color: var(--accent2); }
+  .section-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead th { text-align: left; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 0 8px 10px; font-weight: 600; }
+  thead th:last-child { text-align: right; }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 11px 8px; vertical-align: middle; line-height: 1.4; }
+  tbody td:last-child { text-align: right; }
+  .ex-num { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--border); min-width: 24px; line-height: 1; }
+  .ex-name { font-weight: 500; color: var(--text); }
+  .ex-note { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .ex-sets { font-weight: 600; color: var(--accent2); font-size: 13px; }
+  .ex-weight {
+    font-weight: 600; color: var(--accent); font-size: 13px;
+    border: 1px solid transparent; border-radius: 6px;
+    padding: 4px 8px; cursor: text;
+    transition: border-color 0.15s, background 0.15s;
+    display: inline-block; min-width: 70px; text-align: center;
+    outline: none; white-space: nowrap;
+  }
+  .ex-weight:hover { border-color: #c8f13550; background: #c8f13508; }
+  .ex-weight:focus { border-color: var(--accent); background: #c8f13512; }
+  .tip-bar { margin-top: 16px; background: linear-gradient(135deg, #c8f13508 0%, #4af0b408 100%); border: 1px solid #c8f13520; border-radius: 8px; padding: 12px 14px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .tip-bar strong { color: var(--accent); }
+  .time-row { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin-top: 16px; font-size: 12px; color: var(--muted); padding-top: 12px; border-top: 1px solid var(--border); }
+  .time-row span { color: var(--text); font-weight: 600; }
+  .week-schedule { margin-top: 24px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .week-grid { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 16px; }
+  .week-day { text-align:center; background: var(--surface); border:1px solid var(--border); border-radius:8px; padding: 10px 14px; flex:1; min-width:80px; }
+  .week-day .wlabel { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+  .week-day .wname { font-family:'Bebas Neue',sans-serif; font-size:15px; color:var(--accent); margin-top:4px; }
+  .week-day .wname.rest { color: #f5a623; }
+  .week-day .wname.pull { color: var(--accent2); }
+  .week-day .wname.legs { color: #c084fc; }
+  .lean-rules { font-size:12px; color:var(--muted); line-height:1.7; }
+  .lean-rules strong { color: var(--text); }
+  .save-toast { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: #0a0a0b; font-size: 12px; font-weight: 600; padding: 8px 16px; border-radius: 8px; opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; z-index: 99; }
+  .save-toast.show { opacity: 1; transform: translateY(0); }
+  @media (max-width: 520px) { .day-badges { display: none; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="tag">Lean Bulk · Editable</div>
+    <h1>5-DAY<br/><span>LEAN</span><br/>SPLIT</h1>
+    <div class="meta-grid">
+      <div class="meta-item"><span class="meta-label">Goal</span><span class="meta-value">+20 lb Lean Mass</span></div>
+      <div class="meta-item"><span class="meta-label">Sets/Session</span><span class="meta-value">~18–20 sets</span></div>
+      <div class="meta-item"><span class="meta-label">Exercises/Day</span><span class="meta-value">5–6</span></div>
+      <div class="meta-item"><span class="meta-label">Time</span><span class="meta-value">~60 min</span></div>
+    </div>
+  </header>
+
+  <div class="edit-hint">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    Tap any <strong style="color:var(--accent)">&nbsp;weight&nbsp;</strong> to edit it — changes save automatically.
+  </div>
+
+  <!-- DAY 1 -->
+
+  <div class="day-card open" id="d1">
+    <div class="day-header" onclick="toggle('d1')">
+      <div class="day-num">01</div>
+      <div class="day-info"><div class="day-name">Chest + Triceps</div><div class="day-sub">Push · ~60 min</div></div>
+      <div class="day-badges"><span class="badge badge-push">Push</span><span class="badge badge-strength">Strength</span></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="day-body">
+      <div class="divider"></div>
+      <div class="notes-bar"><strong>Focus:</strong> Heavy flat press first, then upper chest and tricep isolation. Rest 2–3 min on compound sets, 60–90 sec on accessories.</div>
+      <div class="section-label">Exercises</div>
+      <table>
+        <thead><tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Weight</th></tr></thead>
+        <tbody>
+          <tr><td><div class="ex-num">1</div></td><td><div class="ex-name">Flat Dumbbell Bench Press</div><div class="ex-note">3 sec eccentric, drive up explosively</div></td><td><span class="ex-sets">4 × 5</span></td><td><span class="ex-weight" contenteditable="true" data-id="d1-1" spellcheck="false">65–70 lb</span></td></tr>
+          <tr><td><div class="ex-num">2</div></td><td><div class="ex-name">Incline Dumbbell Press</div><div class="ex-note">Upper chest – pause 1 sec at bottom</div></td><td><span class="ex-sets">4 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d1-2" spellcheck="false">50–55 lb</span></td></tr>
+          <tr><td><div class="ex-num">3</div></td><td><div class="ex-name">Cable Fly or Pec Deck</div><div class="ex-note">Full stretch, squeeze at top</div></td><td><span class="ex-sets">3 × 12</span></td><td><span class="ex-weight" contenteditable="true" data-id="d1-3" spellcheck="false">Moderate</span></td></tr>
+          <tr><td><div class="ex-num">4</div></td><td><div class="ex-name">Skull Crushers (EZ Bar)</div><div class="ex-note">Lower slightly behind head for long head stretch</div></td><td><span class="ex-sets">3 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d1-4" spellcheck="false">45–50 lb</span></td></tr>
+          <tr><td><div class="ex-num">5</div></td><td><div class="ex-name">Rope Pushdown</div><div class="ex-note">Flare out at bottom, full squeeze</div></td><td><span class="ex-sets">3 × 12</span></td><td><span class="ex-weight" contenteditable="true" data-id="d1-5" spellcheck="false">30–35 lb</span></td></tr>
+          <tr><td><div class="ex-num">6</div></td><td><div class="ex-name">Forearm Curls</div><div class="ex-note">Wrist curl + reverse curl both directions</div></td><td><span class="ex-sets">3 × failure</span></td><td><span class="ex-weight" contenteditable="true" data-id="d1-6" spellcheck="false">25 lb</span></td></tr>
+        </tbody>
+      </table>
+      <div class="tip-bar"><strong>Overload tip:</strong> Add 2.5–5 lb to flat bench each week. That's the primary lift to progress here.</div>
+      <div class="time-row">⏱ Estimated time: <span>60 min</span></div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+
+  <div class="day-card" id="d2">
+    <div class="day-header" onclick="toggle('d2')">
+      <div class="day-num">02</div>
+      <div class="day-info"><div class="day-name">Back + Biceps</div><div class="day-sub">Pull · ~60 min</div></div>
+      <div class="day-badges"><span class="badge badge-pull">Pull</span><span class="badge badge-strength">Strength</span></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="day-body">
+      <div class="divider"></div>
+      <div class="notes-bar"><strong>Focus:</strong> Width first (pull-ups, pulldown), then thickness (row). Reduce pull-up assist 5 lb every 1–2 weeks. Biceps at the end when arms are already pumped.</div>
+      <div class="section-label">Exercises</div>
+      <table>
+        <thead><tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Weight</th></tr></thead>
+        <tbody>
+          <tr><td><div class="ex-num">1</div></td><td><div class="ex-name">Pull-Up (assisted)</div><div class="ex-note">Full hang at bottom, chest to bar at top</div></td><td><span class="ex-sets">4 × 8</span></td><td><span class="ex-weight" contenteditable="true" data-id="d2-1" spellcheck="false">15 lb assist</span></td></tr>
+          <tr><td><div class="ex-num">2</div></td><td><div class="ex-name">Lat Pulldown (wide grip)</div><div class="ex-note">Slight lean back, pull to upper chest</div></td><td><span class="ex-sets">3 × 12</span></td><td><span class="ex-weight" contenteditable="true" data-id="d2-2" spellcheck="false">100–110 lb</span></td></tr>
+          <tr><td><div class="ex-num">3</div></td><td><div class="ex-name">Seated Cable Row</div><div class="ex-note">Full stretch forward, big squeeze at end</div></td><td><span class="ex-sets">3 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d2-3" spellcheck="false">110–120 lb</span></td></tr>
+          <tr><td><div class="ex-num">4</div></td><td><div class="ex-name">Face Pull</div><div class="ex-note">External rotation at end – rear delts + shoulder health</div></td><td><span class="ex-sets">3 × 15</span></td><td><span class="ex-weight" contenteditable="true" data-id="d2-4" spellcheck="false">35 lb</span></td></tr>
+          <tr><td><div class="ex-num">5</div></td><td><div class="ex-name">Incline Dumbbell Curl</div><div class="ex-note">Arms behind body – max long head stretch</div></td><td><span class="ex-sets">3 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d2-5" spellcheck="false">25 lb</span></td></tr>
+          <tr><td><div class="ex-num">6</div></td><td><div class="ex-name">Hammer Curl</div><div class="ex-note">Brachialis focus – thickens the arm silhouette</div></td><td><span class="ex-sets">3 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d2-6" spellcheck="false">25 lb</span></td></tr>
+        </tbody>
+      </table>
+      <div class="tip-bar"><strong>V-taper key:</strong> Pull-ups and wide pulldowns build width. Rows build thickness. Both every week.</div>
+      <div class="time-row">⏱ Estimated time: <span>60 min</span></div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+
+  <div class="day-card" id="d3">
+    <div class="day-header" onclick="toggle('d3')">
+      <div class="day-num">03</div>
+      <div class="day-info"><div class="day-name">Legs</div><div class="day-sub">Strength + Shape · ~65 min</div></div>
+      <div class="day-badges"><span class="badge badge-legs">Legs</span><span class="badge badge-strength">Strength</span></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="day-body">
+      <div class="divider"></div>
+      <div class="notes-bar"><strong>Focus:</strong> Squat heavy, RDL for hamstrings, then isolation for shape. Drop sets on extensions. Calves at the end.</div>
+      <div class="section-label">Exercises</div>
+      <table>
+        <thead><tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Weight</th></tr></thead>
+        <tbody>
+          <tr><td><div class="ex-num">1</div></td><td><div class="ex-name">Squat (Barbell or Hack Squat)</div><div class="ex-note">Below parallel – depth builds quads and glutes</div></td><td><span class="ex-sets">4 × 6</span></td><td><span class="ex-weight" contenteditable="true" data-id="d3-1" spellcheck="false">Work up to heavy</span></td></tr>
+          <tr><td><div class="ex-num">2</div></td><td><div class="ex-name">Romanian Deadlift</div><div class="ex-note">Hip hinge, feel the hamstring stretch – don't round</div></td><td><span class="ex-sets">3 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d3-2" spellcheck="false">115–135 lb</span></td></tr>
+          <tr><td><div class="ex-num">3</div></td><td><div class="ex-name">Leg Press</div><div class="ex-note">High foot for glutes, low foot for quads</div></td><td><span class="ex-sets">3 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d3-3" spellcheck="false">Moderate–Heavy</span></td></tr>
+          <tr><td><div class="ex-num">4</div></td><td><div class="ex-name">Hip Abduction Machine</div><div class="ex-note">Opening legs – outer glute + glute med</div></td><td><span class="ex-sets">3 × 15</span></td><td><span class="ex-weight" contenteditable="true" data-id="d3-4" spellcheck="false">Moderate</span></td></tr>
+          <tr><td><div class="ex-num">5</div></td><td><div class="ex-name">Leg Curl + Leg Extension (superset)</div><div class="ex-note">Drop set on extensions last set – drop 20% after failure</div></td><td><span class="ex-sets">3 × 10 each</span></td><td><span class="ex-weight" contenteditable="true" data-id="d3-5" spellcheck="false">Moderate</span></td></tr>
+          <tr><td><div class="ex-num">6</div></td><td><div class="ex-name">Rotary Calf Machine</div><div class="ex-note">Full ROM – pause and hold at top 1–2 sec</div></td><td><span class="ex-sets">4 × 15</span></td><td><span class="ex-weight" contenteditable="true" data-id="d3-6" spellcheck="false">Heavy</span></td></tr>
+        </tbody>
+      </table>
+      <div class="tip-bar"><strong>Lean bulk note:</strong> Heavy squats elevate anabolic hormones more than any upper body lift. Don't skip leg day.</div>
+      <div class="time-row">⏱ Estimated time: <span>65 min</span></div>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+
+  <div class="day-card" id="d4">
+    <div class="day-header" onclick="toggle('d4')">
+      <div class="day-num">04</div>
+      <div class="day-info"><div class="day-name">Shoulders</div><div class="day-sub">Push · ~55 min</div></div>
+      <div class="day-badges"><span class="badge badge-push">Push</span><span class="badge badge-hypertrophy">Hypertrophy</span></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="day-body">
+      <div class="divider"></div>
+      <div class="notes-bar"><strong>Focus:</strong> All 3 delt heads. Press heavy, then lateral raise volume to widen the frame. Rear delts last for balance and shoulder health.</div>
+      <div class="section-label">Exercises</div>
+      <table>
+        <thead><tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Weight</th></tr></thead>
+        <tbody>
+          <tr><td><div class="ex-num">1</div></td><td><div class="ex-name">Seated DB Shoulder Press</div><div class="ex-note">Don't lock out at top – keep tension on delts</div></td><td><span class="ex-sets">4 × 8</span></td><td><span class="ex-weight" contenteditable="true" data-id="d4-1" spellcheck="false">40–55 lb</span></td></tr>
+          <tr><td><div class="ex-num">2</div></td><td><div class="ex-name">Arnold Press</div><div class="ex-note">Rotate as you press – hits all 3 heads</div></td><td><span class="ex-sets">3 × 12</span></td><td><span class="ex-weight" contenteditable="true" data-id="d4-2" spellcheck="false">30–40 lb</span></td></tr>
+          <tr><td><div class="ex-num">3</div></td><td><div class="ex-name">Lateral Raise</div><div class="ex-note">Lead with elbow, 4-sec negative</div></td><td><span class="ex-sets">4 × 15</span></td><td><span class="ex-weight" contenteditable="true" data-id="d4-3" spellcheck="false">15–20 lb</span></td></tr>
+          <tr><td><div class="ex-num">4</div></td><td><div class="ex-name">Reverse Pec Deck / Rear Delt Fly</div><div class="ex-note">Rear delts = 3D shoulder look + injury prevention</div></td><td><span class="ex-sets">3 × 15</span></td><td><span class="ex-weight" contenteditable="true" data-id="d4-4" spellcheck="false">Moderate</span></td></tr>
+          <tr><td><div class="ex-num">5</div></td><td><div class="ex-name">Face Pull</div><div class="ex-note">External rotation – protect your shoulders long-term</div></td><td><span class="ex-sets">3 × 20</span></td><td><span class="ex-weight" contenteditable="true" data-id="d4-5" spellcheck="false">30–35 lb</span></td></tr>
+        </tbody>
+      </table>
+      <div class="tip-bar"><strong>Frame width:</strong> 4 sets of laterals with a slow negative is the fastest way to visibly widen your shoulders in 8–10 weeks.</div>
+      <div class="time-row">⏱ Estimated time: <span>55 min</span></div>
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+
+  <div class="day-card" id="d5">
+    <div class="day-header" onclick="toggle('d5')">
+      <div class="day-num">05</div>
+      <div class="day-info"><div class="day-name">Arms</div><div class="day-sub">Hypertrophy Detail · ~55 min</div></div>
+      <div class="day-badges"><span class="badge badge-hypertrophy">Hypertrophy</span></div>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="day-body">
+      <div class="divider"></div>
+      <div class="notes-bar"><strong>Focus:</strong> Pure isolation. Biceps, triceps, forearms. Slow controlled reps, 60 sec rest. Mind-muscle connection over weight.</div>
+      <div class="section-label">Exercises</div>
+      <table>
+        <thead><tr><th>#</th><th>Exercise</th><th>Sets × Reps</th><th>Weight</th></tr></thead>
+        <tbody>
+          <tr><td><div class="ex-num">1</div></td><td><div class="ex-name">EZ Bar Curl</div><div class="ex-note">Strength bicep focus – squeeze hard at top</div></td><td><span class="ex-sets">4 × 8</span></td><td><span class="ex-weight" contenteditable="true" data-id="d5-1" spellcheck="false">60–70 lb bar</span></td></tr>
+          <tr><td><div class="ex-num">2</div></td><td><div class="ex-name">Incline Dumbbell Curl</div><div class="ex-note">Long head stretch – arms hang back behind body</div></td><td><span class="ex-sets">3 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d5-2" spellcheck="false">25 lb</span></td></tr>
+          <tr><td><div class="ex-num">3</div></td><td><div class="ex-name">Close-Grip Bench Press</div><div class="ex-note">Hands shoulder-width – tricep compound strength</div></td><td><span class="ex-sets">4 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d5-3" spellcheck="false">95–105 lb bar</span></td></tr>
+          <tr><td><div class="ex-num">4</div></td><td><div class="ex-name">Overhead Triceps Extension</div><div class="ex-note">Cable or DB – max long head stretch</div></td><td><span class="ex-sets">3 × 12</span></td><td><span class="ex-weight" contenteditable="true" data-id="d5-4" spellcheck="false">40–45 lb</span></td></tr>
+          <tr><td><div class="ex-num">5</div></td><td><div class="ex-name">Hammer Curl</div><div class="ex-note">Brachialis + forearm thickness</div></td><td><span class="ex-sets">3 × 10</span></td><td><span class="ex-weight" contenteditable="true" data-id="d5-5" spellcheck="false">25–30 lb</span></td></tr>
+          <tr><td><div class="ex-num">6</div></td><td><div class="ex-name">Forearm Curls (wrist + reverse superset)</div><div class="ex-note">Both directions to failure</div></td><td><span class="ex-sets">3 × failure</span></td><td><span class="ex-weight" contenteditable="true" data-id="d5-6" spellcheck="false">25 lb</span></td></tr>
+        </tbody>
+      </table>
+      <div class="tip-bar"><strong>Arms tip:</strong> Biceps and triceps get indirect work Mon–Tue. Day 5 finishes them with isolation. Feel every rep.</div>
+      <div class="time-row">⏱ Estimated time: <span>55 min</span></div>
+    </div>
+  </div>
+
+  <!-- Weekly Schedule -->
+
+  <div class="week-schedule">
+    <div class="section-label">Recommended Schedule</div>
+    <div class="week-grid">
+      <div class="week-day"><div class="wlabel">Mon</div><div class="wname">Chest</div></div>
+      <div class="week-day"><div class="wlabel">Tue</div><div class="wname pull">Back</div></div>
+      <div class="week-day"><div class="wlabel">Wed</div><div class="wname legs">Legs</div></div>
+      <div class="week-day"><div class="wlabel">Thu</div><div class="wname rest">Rest</div></div>
+      <div class="week-day"><div class="wlabel">Fri</div><div class="wname">Shoulders</div></div>
+      <div class="week-day"><div class="wlabel">Sat</div><div class="wname pull">Arms</div></div>
+      <div class="week-day"><div class="wlabel">Sun</div><div class="wname rest">Rest</div></div>
+    </div>
+    <div class="lean-rules">
+      <strong>Lean Bulk Rules:</strong> 200–300 cal surplus daily · 0.7–1g protein per lb bodyweight · 7–9 hrs sleep · progressive overload every week on your main lifts.
+    </div>
+  </div>
+
+</div>
+
+<div class="save-toast" id="toast">✓ Saved</div>
+
+<script>
+  const STORAGE_KEY = 'workout_weights_v1';
+
+  function toggle(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function loadWeights() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      document.querySelectorAll('.ex-weight').forEach(el => {
+        const id = el.dataset.id;
+        if (saved[id]) el.textContent = saved[id];
+      });
+    } catch(e) {}
+  }
+
+  let toastTimer;
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 1500);
+  }
+
+  function saveWeights() {
+    try {
+      const data = {};
+      document.querySelectorAll('.ex-weight').forEach(el => {
+        data[el.dataset.id] = el.textContent.trim();
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      showToast();
+    } catch(e) {}
+  }
+
+  let debounce;
+  document.querySelectorAll('.ex-weight').forEach(el => {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+    });
+    el.addEventListener('input', () => {
+      clearTimeout(debounce);
+      debounce = setTimeout(saveWeights, 600);
+    });
+    el.addEventListener('blur', saveWeights);
+    el.addEventListener('click', e => e.stopPropagation());
+  });
+
+  loadWeights();
+</script>
+
+</body>
+</html>
